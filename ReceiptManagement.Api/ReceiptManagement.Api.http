@@ -1,0 +1,16 @@
+@ReceiptManagement.Api_HostAddress = http://localhost:5068
+
+GET {{ReceiptManagement.Api_HostAddress}}/api/vendors
+Accept: application/json
+
+###
+
+GET {{ReceiptManagement.Api_HostAddress}}/api/expense-categories
+Accept: application/json
+
+###
+
+GET {{ReceiptManagement.Api_HostAddress}}/api/receipts
+Accept: application/json
+
+###

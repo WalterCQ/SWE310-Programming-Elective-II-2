@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/.vite/
+**/__pycache__/
+*.pyc
+*.user
+.DS_Store
+.env
+.env.local
+.run/
+~$*.docx
+report/*.docx
+report/*.mmd
+report/build_*.py
+ReceiptManagement.Api/wwwroot/uploads/receipts/

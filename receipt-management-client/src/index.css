@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-hand: "Patrick Hand", "Comic Sans MS", cursive;
+  --font-title: "Caveat", "Patrick Hand", cursive;
+
+  --color-paper: #fbf6e6;
+  --color-paper-deep: #ece4cf;
+  --color-paper-soft: #fffaf0;
+  --color-paper-card: #fffdf7;
+  --color-ink: #1b2540;
+  --color-ink-soft: #2a3554;
+  --color-ink-muted: #4a5374;
+  --color-ink-faint: #6b7693;
+  --color-line: rgba(27, 37, 64, 0.28);
+  --color-line-faint: rgba(27, 37, 64, 0.14);
+  --color-pencil-red: #d6394a;
+  --color-stamp-green: #4a9c6a;
+  --color-tape-gold: #c08c25;
+  --color-pencil-plum: #7d5ca6;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-hand);
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(192, 140, 37, 0.35);
+    color: var(--color-ink);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}

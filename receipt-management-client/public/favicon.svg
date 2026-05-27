@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="receipt-management-icon-title">
+  <title id="receipt-management-icon-title">Receipt Management</title>
+  <rect width="64" height="64" rx="14" fill="#FBF6E6"/>
+  <path d="M17 9h30v45l-5-3.6-5 3.6-5-3.6-5 3.6-5-3.6-5 3.6V9z" fill="#FFFDF7" stroke="#1B2540" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M23 20h18M23 29h18M23 38h12" stroke="#4A5374" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="43" cy="43" r="9" fill="#D6394A" stroke="#1B2540" stroke-width="2.5"/>
+  <path d="M39.5 43.5l3 3 5-6" fill="none" stroke="#FFFDF7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 15h40" stroke="#C08C25" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 5"/>
+</svg>
