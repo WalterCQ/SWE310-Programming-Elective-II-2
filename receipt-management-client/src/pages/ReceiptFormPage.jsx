@@ -165,6 +165,7 @@ export function ReceiptFormPage() {
     uploadReceiptFile(event.dataTransfer.files?.[0])
   }
 
+  // AI output only pre-fills the form; the user still reviews and saves manually.
   const applyAiAnalysis = (analysis = aiResult) => {
     if (!analysis) return
 

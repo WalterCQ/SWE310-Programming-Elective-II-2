@@ -143,6 +143,7 @@ public class ReceiptsController : ReceiptManagementControllerBase
         return null;
     }
 
+    // Validate file signatures to reject fake images with renamed extensions.
     private static async Task<string?> DetectImageContentTypeAsync(IFormFile file)
     {
         var header = new byte[12];

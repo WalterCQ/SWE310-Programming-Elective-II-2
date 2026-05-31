@@ -157,6 +157,7 @@ public class ReceiptManagementReceiptService : IReceiptManagementReceiptService
         receipt.ReceiptNumber = request.ReceiptNumber.Trim();
         receipt.ReceiptDate = request.ReceiptDate.GetValueOrDefault().Date;
         receipt.VendorId = vendor.VendorId;
+        // Store snapshot names so historical receipts remain readable after vendor/category deletion.
         receipt.VendorNameSnapshot = vendor.Name;
         receipt.ExpenseCategoryId = category.ExpenseCategoryId;
         receipt.CategoryNameSnapshot = category.Name;
@@ -182,6 +183,7 @@ public class ReceiptManagementReceiptService : IReceiptManagementReceiptService
             });
         }
 
+        // Recalculate totals on the backend to avoid trusting client-side calculated values.
         receipt.SubtotalAmount = RoundMoney(receipt.Items.Sum(item => item.LineTotal));
         receipt.TotalAmount = RoundMoney(receipt.SubtotalAmount + receipt.TaxAmount);
     }

@@ -80,12 +80,14 @@ public class ReceiptManagementDbContext : DbContext
                 .HasOne(receipt => receipt.Vendor)
                 .WithMany(vendor => vendor.Receipts)
                 .HasForeignKey(receipt => receipt.VendorId)
+                // Keep receipt history even when a vendor or category is removed.
                 .OnDelete(DeleteBehavior.SetNull);
 
             entity
                 .HasOne(receipt => receipt.ExpenseCategory)
                 .WithMany(category => category.Receipts)
                 .HasForeignKey(receipt => receipt.ExpenseCategoryId)
+                // Keep receipt history even when a vendor or category is removed.
                 .OnDelete(DeleteBehavior.SetNull);
         });
 
