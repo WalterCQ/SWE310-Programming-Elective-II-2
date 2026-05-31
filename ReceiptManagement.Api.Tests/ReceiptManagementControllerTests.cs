@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using ReceiptManagement.Api.Configuration;
 using ReceiptManagement.Api.Controllers;
@@ -96,18 +97,35 @@ public class ReceiptManagementControllerTests
     }
 
     [Fact]
-    public async Task ReceiptAnalyzeImage_ReturnsServiceUnavailableWhenApiKeyIsMissing()
+    public async Task ReceiptImageAnalysis_ReturnsLocalMockWhenApiKeyIsMissing()
     {
-        var controller = new ReceiptsController(
-            new StubReceiptService(),
-            new StubReceiptImageAnalysisService
+        var mockRoot = Path.Combine(Path.GetTempPath(), $"receipt-analysis-mock-{Guid.NewGuid():N}");
+        var mockDirectory = Path.Combine(mockRoot, "MockData");
+        Directory.CreateDirectory(mockDirectory);
+        await File.WriteAllTextAsync(
+            Path.Combine(mockDirectory, "receipt-image-analysis.mock.json"),
+            """
             {
-                AnalyzeResult = ServiceResult<ReceiptImageAnalysisDto>.Fail(
-                    "SILICONFLOW_API_KEY is not configured. Add it to your local .env file or shell environment.",
-                    StatusCodes.Status503ServiceUnavailable)
-            },
-            Options.Create(new ReceiptImageOptions()),
-            new StubWebHostEnvironment());
+              "receiptNumber": "MOCK-TEST-001",
+              "receiptDate": "2026-05-28",
+              "vendorName": "ZUS Coffee - XMUM",
+              "categoryName": "Food & Dining",
+              "taxAmount": 1.9,
+              "totalAmount": 33.6,
+              "currencyCode": "MYR",
+              "paymentMethod": "EWallet",
+              "confidence": 0.88,
+              "rawTextSummary": "Local fallback test receipt.",
+              "items": [
+                {
+                  "description": "Spanish Latte",
+                  "quantity": 1,
+                  "unitPrice": 11.2,
+                  "lineTotal": 11.2
+                }
+              ]
+            }
+            """);
         var bytes = new byte[] { 0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46 };
         var file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "receipt.jpg")
         {
@@ -115,12 +133,30 @@ public class ReceiptManagementControllerTests
             ContentType = "image/jpeg"
         };
 
-        var response = await controller.AnalyzeImage(file);
+        try
+        {
+            var service = new SiliconFlowReceiptImageAnalysisService(
+                new HttpClient(new ThrowingHttpMessageHandler()),
+                new ConfigurationBuilder().Build(),
+                new StubWebHostEnvironment
+                {
+                    ContentRootPath = mockRoot,
+                    EnvironmentName = "Production"
+                });
 
-        var objectResult = Assert.IsType<ObjectResult>(response.Result);
-        Assert.Equal(StatusCodes.Status503ServiceUnavailable, objectResult.StatusCode);
-        var body = Assert.IsType<ApiResponse<ReceiptImageAnalysisDto>>(objectResult.Value);
-        Assert.False(body.Success);
+            var result = await service.AnalyzeAsync(file);
+
+            Assert.True(result.Success);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+            Assert.Equal("Receipt image analyzed with local mock data.", result.Message);
+            Assert.Equal("ZUS Coffee - XMUM", result.Data?.VendorName);
+            Assert.Equal("Food & Dining", result.Data?.CategoryName);
+            Assert.Single(result.Data?.Items ?? []);
+        }
+        finally
+        {
+            Directory.Delete(mockRoot, recursive: true);
+        }
     }
 
     private sealed class StubVendorService : IReceiptManagementVendorService
@@ -203,5 +239,13 @@ public class ReceiptManagementControllerTests
         public string EnvironmentName { get; set; } = "Development";
         public string WebRootPath { get; set; } = Path.GetTempPath();
         public IFileProvider WebRootFileProvider { get; set; } = new NullFileProvider();
+    }
+
+    private sealed class ThrowingHttpMessageHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            throw new InvalidOperationException("External SiliconFlow HTTP calls should not run in mock mode.");
+        }
     }
 }

@@ -1,0 +1,44 @@
+{
+  "receiptNumber": "MOCK-XMUM-001",
+  "receiptDate": "2026-05-28",
+  "vendorName": "ZUS Coffee - XMUM",
+  "categoryName": "Food & Dining",
+  "taxAmount": 1.9,
+  "totalAmount": 33.6,
+  "currencyCode": "MYR",
+  "paymentMethod": "EWallet",
+  "confidence": 0.88,
+  "rawTextSummary": "Local mock receipt for XMUM A3 Library Cafe coffee purchase. Used when the external SiliconFlow key or network is unavailable.",
+  "items": [
+    {
+      "description": "Spanish Latte",
+      "quantity": 1,
+      "unitPrice": 11.2,
+      "lineTotal": 11.2
+    },
+    {
+      "description": "Hot Latte",
+      "quantity": 1,
+      "unitPrice": 10.2,
+      "lineTotal": 10.2
+    },
+    {
+      "description": "Banana bread slice",
+      "quantity": 1,
+      "unitPrice": 6.5,
+      "lineTotal": 6.5
+    },
+    {
+      "description": "Extra espresso shot",
+      "quantity": 1,
+      "unitPrice": 2,
+      "lineTotal": 2
+    },
+    {
+      "description": "Gula Melaka syrup add-on",
+      "quantity": 1,
+      "unitPrice": 1.8,
+      "lineTotal": 1.8
+    }
+  ]
+}

@@ -21,7 +21,7 @@ export function AppShell() {
             <p className="text-sm leading-5 tracking-[0.22em] text-tape-gold">Pocket Ledger</p>
             <h1 className="mt-1 font-title text-4xl font-bold leading-none text-ink">Receipt Book</h1>
           </div>
-          <div className="hidden rotate-[-1deg] rounded-[3px_8px_4px_10px/8px_3px_9px_4px] border-2 border-pencil-red/70 bg-pencil-red/10 px-3 py-2 text-sm leading-5 text-pencil-red sm:block lg:mt-5 lg:inline-block">
+          <div className="hidden rotate-[-1deg] rounded-[3px_8px_4px_10px/8px_3px_9px_4px] border-2 border-stamp-green/70 bg-stamp-green/10 px-3 py-2 text-sm leading-5 text-stamp-green sm:block lg:mt-5 lg:inline-block">
             grocery runs, coffee stops, little claims～
           </div>
         </div>

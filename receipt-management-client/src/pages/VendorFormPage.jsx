@@ -87,7 +87,7 @@ export function VendorFormPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="vendor notebook" title={isEdit ? 'Edit Vendor' : 'Create Vendor'} />
+      <PageHeader eyebrow="Vendor Notebook" title={isEdit ? 'Edit Vendor' : 'Create Vendor'} />
       <ErrorBanner error={error} />
       <Panel>
         <form className="grid gap-5" onSubmit={submit}>

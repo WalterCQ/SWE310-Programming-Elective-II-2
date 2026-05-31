@@ -94,7 +94,6 @@ public class ReceiptsController : ReceiptManagementControllerBase
     [ProducesResponseType(typeof(ApiResponse<ReceiptImageAnalysisDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<ReceiptImageAnalysisDto>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<ReceiptImageAnalysisDto>), StatusCodes.Status502BadGateway)]
-    [ProducesResponseType(typeof(ApiResponse<ReceiptImageAnalysisDto>), StatusCodes.Status503ServiceUnavailable)]
     [ProducesResponseType(typeof(ApiResponse<ReceiptImageAnalysisDto>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ApiResponse<ReceiptImageAnalysisDto>>> AnalyzeImage(IFormFile? file)
     {

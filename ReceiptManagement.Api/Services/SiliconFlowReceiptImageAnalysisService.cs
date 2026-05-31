@@ -15,21 +15,24 @@ public class SiliconFlowReceiptImageAnalysisService : IReceiptImageAnalysisServi
 
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public SiliconFlowReceiptImageAnalysisService(HttpClient httpClient, IConfiguration configuration)
+    public SiliconFlowReceiptImageAnalysisService(
+        HttpClient httpClient,
+        IConfiguration configuration,
+        IWebHostEnvironment webHostEnvironment)
     {
         _httpClient = httpClient;
         _configuration = configuration;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<ServiceResult<ReceiptImageAnalysisDto>> AnalyzeAsync(IFormFile file)
     {
         var apiKey = _configuration["SILICONFLOW_API_KEY"] ?? _configuration["SiliconFlow:ApiKey"];
-        if (string.IsNullOrWhiteSpace(apiKey))
+        if (ShouldUseMockAnalysis(apiKey))
         {
-            return ServiceResult<ReceiptImageAnalysisDto>.Fail(
-                "SILICONFLOW_API_KEY is not configured. Add it to your local .env file or shell environment.",
-                StatusCodes.Status503ServiceUnavailable);
+            return await AnalyzeWithMockDataAsync();
         }
 
         try
@@ -151,6 +154,40 @@ public class SiliconFlowReceiptImageAnalysisService : IReceiptImageAnalysisServi
         }
 
         return request;
+    }
+
+    private async Task<ServiceResult<ReceiptImageAnalysisDto>> AnalyzeWithMockDataAsync()
+    {
+        var mockPath = GetMockResponsePath();
+        var mockJson = await File.ReadAllTextAsync(mockPath);
+        var analysis = JsonSerializer.Deserialize<ReceiptImageAnalysisDto>(mockJson, JsonOptions);
+        if (analysis is null)
+        {
+            return ServiceResult<ReceiptImageAnalysisDto>.Fail(
+                "Local mock receipt analysis returned an empty response.",
+                StatusCodes.Status500InternalServerError);
+        }
+
+        NormalizeAnalysis(analysis);
+        return ServiceResult<ReceiptImageAnalysisDto>.Ok(analysis, "Receipt image analyzed with local mock data.");
+    }
+
+    private bool ShouldUseMockAnalysis(string? apiKey)
+    {
+        return string.IsNullOrWhiteSpace(apiKey) || _webHostEnvironment.IsDevelopment();
+    }
+
+    private string GetMockResponsePath()
+    {
+        var configuredPath = _configuration["SiliconFlow:MockResponsePath"];
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            return Path.IsPathRooted(configuredPath)
+                ? configuredPath
+                : Path.Combine(_webHostEnvironment.ContentRootPath, configuredPath);
+        }
+
+        return Path.Combine(_webHostEnvironment.ContentRootPath, "MockData", "receipt-image-analysis.mock.json");
     }
 
     private string GetChatCompletionsEndpoint()

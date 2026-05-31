@@ -247,7 +247,7 @@ export function ReceiptFormPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="receipt desk" title={isEdit ? 'Edit Receipt' : 'Create Receipt'} />
+      <PageHeader eyebrow="Receipt Desk" title={isEdit ? 'Edit Receipt' : 'Create Receipt'} />
       <ErrorBanner error={error} />
       <ErrorBanner error={Object.keys(clientErrors).length ? { message: 'Fix highlighted frontend validation issues.', errors: clientErrors } : null} />
 

@@ -79,7 +79,7 @@ export function CategoryFormPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="category notebook" title={isEdit ? 'Edit Category' : 'Create Category'} />
+      <PageHeader eyebrow="Category Notebook" title={isEdit ? 'Edit Category' : 'Create Category'} />
       <ErrorBanner error={error} />
       <Panel>
         <form className="grid gap-5" onSubmit={submit}>

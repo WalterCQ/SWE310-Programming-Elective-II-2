@@ -14,4 +14,6 @@
 report/*.docx
 report/*.mmd
 report/build_*.py
-ReceiptManagement.Api/wwwroot/uploads/receipts/
+ReceiptManagement.Api/wwwroot/uploads/receipts/*
+!ReceiptManagement.Api/wwwroot/uploads/receipts/seed/
+!ReceiptManagement.Api/wwwroot/uploads/receipts/seed/*.png
